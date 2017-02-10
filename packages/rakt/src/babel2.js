@@ -15,7 +15,7 @@ module.exports = function ({ types: t }) {
           let dataDeco = decorators.filter(x => x.expression.type === 'CallExpression' && x.expression.callee.name === 'initial')[0]
           if(dataDeco){            
             
-            let modPath = path.hub.file.opts.filename.replace(path.hub.file.opts.sourceRoot, '.')
+            let modPath = path.hub.file.opts.filename
             dataDeco.expression.arguments[0] = t.StringLiteral(hashify(modPath))            
           }
         }

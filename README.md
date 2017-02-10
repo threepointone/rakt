@@ -119,4 +119,4 @@ todo -
 - use named exports (incl data fetches)
 - manifest and such
 - progressive css
-
+- obscure paths in output 

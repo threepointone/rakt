@@ -38,6 +38,7 @@ import Helmet from 'react-helmet'
 export default function server({ entry }){
   
   let modules = parseModules(entry)
+  console.log({modules})
   let routes = parseRoutes(entry)
 
   let compiler = webpack({ 

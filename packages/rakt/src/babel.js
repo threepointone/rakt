@@ -85,7 +85,7 @@ module.exports = function ({ types: t }) {
             let absolute = require.resolve(
               nodepath.join(nodepath.dirname(path.hub.file.opts.filename), attrModule.value))
 
-            let hashed = hashify(absolute).replace(path.hub.file.opts.sourceRoot, '.');
+            let hashed = hashify(absolute); 
             
             [attrRender, attrChildren].forEach(X => {
 
@@ -116,24 +116,9 @@ module.exports = function ({ types: t }) {
               t.StringLiteral(absolute)
             ))            
               
-          } 
-
-                    
+          }                     
         }
-      },
-      ClassDeclaration(path){
-        let decorators = path.node.decorators
-        if(decorators){
-          
-          let dataDeco = decorators.filter(x => x.expression.type === 'CallExpression' && x.expression.callee.name === 'initial')[0]
-          if(dataDeco){            
-            
-            let modPath = path.hub.file.opts.filename.replace(path.hub.file.opts.sourceRoot, '.')
-            dataDeco.expression.arguments[0] = t.StringLiteral(hashify(modPath))
-            
-          }
-        }
-      }
+      }      
     }    
   }
 };
