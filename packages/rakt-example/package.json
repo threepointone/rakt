@@ -1,0 +1,15 @@
+{
+  "name": "rakt-example",
+  "version": "0.0.0",
+  "description": "rakt example",
+  "main": "lib/index.js",
+  "repository": {},
+  "scripts": {
+    "start": "rakt"
+  },
+  "author": "Sunil Pai <threepointone@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "rakt": "*"
+  }
+}
