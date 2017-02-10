@@ -81,8 +81,9 @@ export default class User {
 
 
 ```
-todo - `@post`, `@put`, `@del`
-todo - `@socket`, `@sse`, `@memory`, etc 
+
+- todo - `@post`, `@put`, `@del`
+- todo - `@socket`, `@sse`, `@memory`, etc 
 
 prpl ootb
 ---
@@ -102,8 +103,6 @@ integrating with other apps/frameworks
 you can take pieces from rakt and use them in your own app sans the rakt stack. 
 
 [todo]
-
-
 
 
 todo - 

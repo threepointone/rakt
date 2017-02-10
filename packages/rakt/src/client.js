@@ -1,5 +1,4 @@
 /* global $ENTRY */
-console.log('sdsdfsd')
 
 import React from 'react'
 import { render } from 'react-dom'

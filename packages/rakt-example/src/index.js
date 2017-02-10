@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route, Switch, Link } from "react-router-dom";
-let umm = <span>ummmmm</span>;
 
 export default class App extends React.Component {
   render() {
@@ -30,13 +29,13 @@ export default class App extends React.Component {
             path="/b"
             exact
             module="./b.js"
-            render={({ Module }) => Module ? <Module.B /> : umm}
+            render={({ Module }) => Module ? <Module.B /> : <span> loading... </span>}
           />
           <Route
             path="/c"
             exact
             module="./c.js"            
-          >{({ Module }) => Module ? <Module.default /> : umm}</Route>
+          >{({ Module }) => Module ? <Module.default /> : <span> loading... </span>}</Route>
           <Route render={() => <span>no match</span>} />
         </Switch>
       </div>

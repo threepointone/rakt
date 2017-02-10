@@ -86,7 +86,7 @@ export default function server({ entry }){
 
   app.use('/api/:mod/*', (req, res, next ) => {
     
-    let mod = require(modules[req.params.mod].replace('./example', '.'))
+    let mod = require(modules[req.params.mod])
     mod = (mod.default ? mod.default : mod)
     if(mod.mod){
       // todo - deep?
