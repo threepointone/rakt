@@ -1,4 +1,5 @@
 /* global $ENTRY */
+console.log('sdsdfsd')
 
 import React from 'react'
 import { render } from 'react-dom'
@@ -7,13 +8,17 @@ import { BrowserRouter } from 'react-router-dom'
 import Helmet from 'react-helmet'
 
 import { rehydrate } from 'glamor'
-rehydrate(JSON.parse(window.getElementById('css-ids').dataset.ids))
+rehydrate(JSON.parse(document.getElementById('css-ids').dataset.ids))
 
-const App = require($ENTRY)
+let App = require($ENTRY)
+App = App.default || App
 
-render(<BrowserRouter basename='app'>
+
+render(<BrowserRouter basename='/app'>
   <Rakt>
-    <Helmet title="Home" />
-    <App/>
+    <div>
+      <Helmet title="Home" />
+      <App/>
+    </div>
   </Rakt>
 </BrowserRouter>, document.getElementById('root'))

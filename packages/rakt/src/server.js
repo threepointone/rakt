@@ -42,7 +42,7 @@ export default function server({ entry }){
 
   let compiler = webpack({ 
     devtool: "source-map",
-    entry,
+    entry: [entry, require.resolve('./client.js')],
     output: {
       path: __dirname, // todo - ?
       filename: "[name].bundle.js",
@@ -58,6 +58,13 @@ export default function server({ entry }){
             "presets": [ "es2015", "stage-0", "react" ],
             "plugins": [ require.resolve("./babel.js"), require.resolve("./babel2.js"), "transform-decorators-legacy" ]
           }   // todo - ?
+        },
+        {
+          test: /\.js$/,
+          loader: require.resolve('./loader.js'),
+          query: {
+            entry
+          } 
         }
       ]    
     }
@@ -67,12 +74,12 @@ export default function server({ entry }){
   const app = express()
 
   // app.use(historyApiFallback({ verbose: false }));
-  // app.use(devware(compiler, {
-  //   noInfo: true
-  //   // ,publicPath: config.output.publicPath
-  // }))
+  app.use(devware(compiler, {
+    // noInfo: true,
+    publicPath: '/app'
+  }))
 
-  // app.use(hotware(compiler));
+  app.use(hotware(compiler));
 
   app.use(favicon('./favicon.png'));
 
@@ -98,7 +105,7 @@ export default function server({ entry }){
 
     let context = {}
     let html = renderToString(
-      <Layout>
+      <Layout assets={[ 'main.bundle.js']}>
         <StaticRouter location={req.url} context={context} basename='app'>
           <Rakt>
             <div>
