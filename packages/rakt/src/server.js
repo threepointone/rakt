@@ -4,7 +4,6 @@ import path from 'path'
 import parseModules from './parseModules'
 import parseRoutes from './parseRoutes'
 import webpack from 'webpack'
-import { Route } from 'react-router-dom'
 import 'isomorphic-fetch'
 
 import favicon from 'serve-favicon'
@@ -15,7 +14,7 @@ import Layout from './layout'
 import { Rakt } from './'
 import devware from 'webpack-dev-middleware'
 import hotware from 'webpack-hot-middleware'
-import historyApiFallback from 'connect-history-api-fallback'
+// import historyApiFallback from 'connect-history-api-fallback'
 
 import Helmet from 'react-helmet'
 
@@ -156,5 +155,3 @@ export default function server({ entry }){
   return app
   // when do we 404?
 }
-
-

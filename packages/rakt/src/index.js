@@ -156,6 +156,7 @@ export function ensure(moduleId, fn, done){
   fn().then(Module => done(undefined, Module), done)
 }
 
+// todo - weakmap cache on fn 
 export function wrap(fn, { module, load, defer, absolute }) {
   return ({ match, history }) => {
     
@@ -206,3 +207,11 @@ export function wrap(fn, { module, load, defer, absolute }) {
   };
 }
 
+
+export function defaultRender({ Module, match, ...rest }) {
+  return (match && Module) ? 
+    (Module.default ? 
+      <Module.default match={match} {...rest} /> : 
+      <Module match={match} {...rest} />) : 
+    null
+}

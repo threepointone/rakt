@@ -18,7 +18,7 @@ function wrap(SOURCE, name, hashed, absolute, server) {
   // todo - use imports instead of requires 
   return `require('rakt').wrap(${SOURCE}, { 
     module:${path}, 
-    absolute: ${server ? `'${absolute}'` : 'null'},
+     ${server ? `absolute: '${absolute}',` : ''}
     load: done =>
       require('rakt').ensure(require.resolveWeak(${path}), 
         () => require.ensure([], require => require(${path}), '${hashed}'),  
@@ -29,11 +29,7 @@ function wrap(SOURCE, name, hashed, absolute, server) {
 // don't add new props or anything here 
 // else render/children will behave differently 
 
-let defaultSrc = `({ Module, match, ...rest }) => (match && Module) ? 
-  (Module.default ? 
-    <Module.default match={match} {...rest} /> : 
-    <Module match={match} {...rest} />) : 
-  null`
+let defaultSrc = `require('rakt').defaultRender`
 
 module.exports = function ({ types: t }) {
   return {
