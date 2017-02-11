@@ -1,4 +1,4 @@
-import React, { PropTypes, Children } from "react";
+import React, { PropTypes } from "react";
 let isBrowser = typeof window !== "undefined";
 import { withRouter } from 'react-router'
 let nodeRequire = !isBrowser && (() => eval('require'))()
@@ -143,7 +143,12 @@ export function del(mod){
 
 }
 
-
+export function ensure(moduleId, fn, done){
+  if(__webpack_modules__[moduleId]) {       //eslint-disable-line no-undef
+    return done(undefined, __webpack_require__(moduleId))        //eslint-disable-line no-undef
+  } 
+  fn().then(Module => done(undefined, Module), done)
+}
 
 export function wrap(fn, { module, load, defer, absolute }) {
   return ({ match, history }) => {

@@ -50,7 +50,7 @@ optionally, use `render`/`children` as you normally would
 
 - no new apis(!)
 - handles code splitting, SSR, css, behind the scenes 
-- <2k gz. for reals. 
+- tree-shakes itself to almost nothing 
 
 
 NB: `path` and `module` must be string literals, and `render`/`children` 
@@ -122,21 +122,22 @@ cli
 integrating with other apps/frameworks
 ---
 
-you can take pieces from rakt and use them in your own app sans the rakt stack. 
-
 [todo]
 
-- babel plugins
+you can take pieces from rakt and use them in your own app sans the rakt stack. 
+
+- babel/webpack pipeline
 - `<Layout/>`
 - api server 
 - route-aware data fetcher 
-- build system
+
 
 todo - 
 
 - prefetch links
 - websockets?
 - work with aliased modules 
+- `defer`
 - preserve server side rendered html while module asyncly loads 
 - sw-precache, etc
 - use named exports (incl data fetches)
@@ -148,3 +149,6 @@ todo -
 - cache keys for @initial
 - react-native? 
 - in-house `<Route/>`, `<Link/>`, etc 
+- include routes in bundle 
+- optimistic updates
+- rhl

@@ -7,40 +7,23 @@ function hashify(path){
   return hash(path).toString(36)
 }
 
+
+
 function wrap(SOURCE, name, hashed, absolute) {
   let path = JSON.stringify(name);
+
   return `require('rakt').wrap(${SOURCE}, { 
     module:${path}, 
     absolute: ${JSON.stringify(absolute)},
-    load: done => {
-    
-      let Module, error
-
-      try{    
-        let moduleId = require.resolveWeak(${path})
-        if(__webpack_modules__[moduleId]) {      
-          done(undefined, __webpack_require__(moduleId))        
-          return 
-        }         
-      }
-      catch(err) {
-        // silent
-      }
-
-
-      require.ensure([], require => {
-        try{
-          Module = require(${path})  
-        }
-        catch(err) {
-          error = err
-        }
-        done(error, Module)      
-      }, '${hashed}') 
-
-  } })`;
-  // todo - chunk should have full path
+    load: done =>
+      require('rakt').ensure(require.resolveWeak(${path}), 
+        () => require.ensure([], require => require(${path}), '${hashed}'),  
+        done)      
+  })`;
 }
+
+// don't add new props or anything here 
+// else render/children will behave differently 
 
 let defaultSrc = `({ Module, match, ...rest }) => (match && Module) ? 
   (Module.default ? 
