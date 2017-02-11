@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 let isBrowser = typeof window !== "undefined";
-import { withRouter } from 'react-router'
+import { withRouter, matchPath } from 'react-router'
 let nodeRequire = !isBrowser && (() => eval('require'))()
 
 
@@ -22,6 +22,8 @@ export class Loading extends React.Component {
   }
 }
 
+// todo - load this only if there are data fetching components 
+// in the bundle 
 @withRouter
 export class Rakt extends React.Component{
   static displayName = 'Rakt'
@@ -76,10 +78,10 @@ export class Rakt extends React.Component{
     // this.context.history.listen(url => {
     //   let matches = this.props.routes
     //     .filter(({pattern, exact, strict}) => matchPath(this.state.url, pattern, {exact, strict}))
-    //     .filter(({ moduleId }) => !__webpack_modules__[moduleId]) //eslint-disable-line no-undef
-    //     .filter(({ moduleId }) => !this.inflight[`${moduleId}:${url}`])
+    //     .filter(({ hash }) => !__webpack_modules__[hash]) //eslint-disable-line no-undef
+    //     .filter(({ hash }) => !this.inflight[`${hash}:${url}`])
     //     // todo - dedupe 
-    //   matches.forEach(({ moduleId }) => this.inflight[`${moduleId}:${url}`] = [])
+    //   matches.forEach(({ hash }) => this.inflight[`${hash}:${url}`] = [])
 
     //   Promise.all(matches.map(({ moduleId }) => fetch(`/api/${moduleId}${url}`)))
     //     .then(results => results.forEach((result, i) => {
@@ -203,3 +205,4 @@ export function wrap(fn, { module, load, defer, absolute }) {
       );
   };
 }
+
