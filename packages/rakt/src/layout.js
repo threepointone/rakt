@@ -28,7 +28,7 @@ export default class Layout extends React.Component{
         {assets
           .filter(path => path.endsWith('.js'))
           .map(path => <script key={path} src={path} />)}
-        <script dangerouslySetInnerHTML={{ __html: `startup()` }} />
+        <script dangerouslySetInnerHTML={{ __html: `window.__init()` }} />
       </body>
     </html>
   }

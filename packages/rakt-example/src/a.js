@@ -1,7 +1,7 @@
 import React from "react";
 import { initial } from 'rakt'
 
-@initial(({ req }, done) => {
+@initial(({ req, done }) => {
   done(undefined, { wahoo: Math.random() * 1000 })
 })
 export default class A extends React.Component {

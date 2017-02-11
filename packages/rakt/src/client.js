@@ -13,8 +13,10 @@ let App = require($ENTRY)
 App = App.default || App
 
 // do anything else critical here 
+// service worker registration etc 
+// if ssr was off, you could start right away 
 
-window.startup = () => 
+window.__init = () => 
   render(<BrowserRouter basename='/app'>
     <Rakt cache={JSON.parse(document.getElementById('rakt-ssr').dataset.ssr)}>
       <div>

@@ -92,8 +92,11 @@ export default function server({ entry }){
     mod = (mod.default ? mod.default : mod)
     if(mod.mod){
       // todo - deep?
-      mod.mod({req}, (err, data) => {
-        return err ? next(err) : res.send(data)
+      mod.mod({
+        req, 
+        res, 
+        next, 
+        done: (err, data) => err ? next(err) : res.send(data)
       })
     }
     else {
@@ -135,8 +138,6 @@ export default function server({ entry }){
       res.send('<!doctype html>' + html)    
     }
 
-    
-
     let promises = fetchers    
       .map(x => {
         return fetch(`http://localhost:3000/api/${x.hash}${req.url}`).then(x => x.json())
@@ -144,8 +145,6 @@ export default function server({ entry }){
 
     Promise.all(promises).then(results => andThen(undefined, matches.map((x, i) => ({...x, result: results[i]}))), andThen)    
     
-
-
   })
   return app
   // when do we 404?

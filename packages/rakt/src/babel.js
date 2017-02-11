@@ -13,14 +13,12 @@ function hashify(path){
 // and `render`/`children` should not be spread as `{...props}`
 
 
-
-
-function wrap(SOURCE, name, hashed, absolute) {
+function wrap(SOURCE, name, hashed, absolute, server) {
   let path = JSON.stringify(name);
   // todo - use imports instead of requires 
   return `require('rakt').wrap(${SOURCE}, { 
     module:${path}, 
-    absolute: ${JSON.stringify(absolute)},
+    absolute: ${server ? `'${absolute}'` : 'null'},
     load: done =>
       require('rakt').ensure(require.resolveWeak(${path}), 
         () => require.ensure([], require => require(${path}), '${hashed}'),  
@@ -82,7 +80,7 @@ module.exports = function ({ types: t }) {
               let xSrc = X ? 
                 src.substring(pts.start, pts.end) : 
                 defaultSrc;
-              let wrapped = X ? wrap(xSrc, attrModule.value, hashed, absolute) : null;
+              let wrapped = X ? wrap(xSrc, attrModule.value, hashed, absolute, state.opts.server) : null;
               if (wrapped) {
                 X.expression = babylon.parse(wrapped, {
                   plugins: [ "*" ]
@@ -91,20 +89,13 @@ module.exports = function ({ types: t }) {
             })  
 
             if(!attrRender && !attrChildren){
-              let wrapped = wrap(defaultSrc, attrModule.value, hashed, absolute) // todo - 
+              let wrapped = wrap(defaultSrc, attrModule.value, hashed, absolute, state.opts.server) // todo - 
               path.node.openingElement.attributes.push(t.jSXAttribute(t.jSXIdentifier('render'), 
                   t.jSXExpressionContainer(babylon.parse(wrapped, {
                   plugins: [ "*" ]
                 }).program.body[0].expression) 
                ))  
-            }  
-            
-          path.node.openingElement.attributes.push(
-            t.jSXAttribute(
-              t.jSXIdentifier('absolute'), 
-              t.stringLiteral(absolute)
-            ))            
-              
+            }                            
           }                     
         }
       },

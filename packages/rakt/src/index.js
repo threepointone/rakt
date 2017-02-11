@@ -49,7 +49,6 @@ export class Rakt extends React.Component{
             .then(res => {
               
               this.cache[`${mod}:${this.url()}`] = res
-              // this.setState({ cache: this.cache })
               fn(undefined, res)
             }, error => {
               this.errors[`${mod}:${this.url()}`] = error
