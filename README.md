@@ -63,6 +63,11 @@ css
 [todo]
 
 rakt lets you write 'inline' css via [`glamor/createElement`](https://github.com/threepointone/glamor/blob/master/docs/createElement.md)
+```jsx
+<div css={{ color: 'red' }}>
+  bloody valentine
+</div>
+```
 
 
 data fetching
@@ -110,8 +115,11 @@ cli
 
 [todo]
 
-#### `rakt <script> <options>`
-#### `rakt build <script> path/to/folder`
+`rakt <script> <options>`
+
+`rakt build <script> path/to/folder`
+
+options 
 
 - `ssr` - server side rendering - default `true`
 - `splits` - code splits - default `true`
