@@ -110,8 +110,8 @@ cli
 
 [todo]
 
-### `rakt <script> <options>`
-### `rakt build <script> path/to/folder`
+#### `rakt <script> <options>`
+#### `rakt build <script> path/to/folder`
 
 - `ssr` - server side rendering - default `true`
 - `splits` - code splits - default `true`
