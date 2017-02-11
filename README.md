@@ -53,8 +53,8 @@ optionally, use `render`/`children` as you normally would
 - tree-shakes itself to almost nothing 
 
 
-NB: `path` and `module` must be string literals, and `render`/`children` 
-should not be spread as `{...props}`
+NB: for great perf, `path` and `module` must be string literals, 
+and `render`/`children` should not be spread as `{...props}`
 
 
 css
@@ -138,6 +138,11 @@ you can take pieces from rakt and use them in your own app sans the rakt stack.
 - `<Layout/>`
 - api server 
 - route-aware data fetcher 
+
+implementation
+---
+
+[todo]
 
 
 todo - 
