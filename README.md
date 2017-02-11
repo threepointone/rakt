@@ -53,10 +53,6 @@ optionally, use `render`/`children` as you normally would
 - tree-shakes itself to almost nothing 
 
 
-NB: for great perf, `path` and `module` must be string literals, 
-and `render`/`children` should not be spread as `{...props}`
-
-
 css
 ---
 
