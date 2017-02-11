@@ -1,6 +1,6 @@
 {
   "name": "rakt-example",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "rakt example",
   "main": "lib/index.js",
   "repository": {},
@@ -10,6 +10,6 @@
   "author": "Sunil Pai <threepointone@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "rakt": "*"
+    "rakt": "^0.0.1"
   }
 }
