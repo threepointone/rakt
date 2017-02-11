@@ -5,3 +5,5 @@ module.exports = function(source, map) {
   return source
   
 }
+
+// strip App.setup

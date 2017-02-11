@@ -12,12 +12,14 @@ rehydrate(JSON.parse(document.getElementById('css-ids').dataset.ids))
 let App = require($ENTRY)
 App = App.default || App
 
+// do anything else critical here 
 
-render(<BrowserRouter basename='/app'>
-  <Rakt>
-    <div>
-      <Helmet title="Home" />
-      <App/>
-    </div>
-  </Rakt>
-</BrowserRouter>, document.getElementById('root'))
+window.startup = () => 
+  render(<BrowserRouter basename='/app'>
+    <Rakt cache={JSON.parse(document.getElementById('rakt-ssr').dataset.ssr)}>
+      <div>
+        <Helmet title="Home" />
+        <App/>
+      </div>
+    </Rakt>
+  </BrowserRouter>, document.getElementById('root'))

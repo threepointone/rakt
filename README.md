@@ -94,7 +94,7 @@ export default class User {
 NB - *don't* declare/import any 'serverside only' dependencies outside the 
 `@initial` decorator. 
 
-- todo - `@post`, `@put`, `@del`
+- todo - `@get`, `@post`, `@put`, `@del`
 - todo - `@socket`, `@sse`, `@memory`, etc 
 - todo - cache keys / idents 
 

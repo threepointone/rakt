@@ -2,40 +2,60 @@ var glob = require("glob")
 import path from 'path'
 import fs from 'fs'
 import * as babylon from 'babylon'
+import traverse from 'babel-traverse'
 let hash = require('glamor/lib/hash').default
 
 function hashify(path){
   return hash(path).toString(36)
 }
 
-module.exports = function(entry){
-  // let ret = {
-  //   'route': [m1, m2]
-  // }
+function clean(obj){
   let ret = {}
+  Object.keys(obj).forEach(key => {
+    if(obj[key] !== undefined){
+      if(obj[key] === null){
+        ret[key] = true
+        return  
+      }
+      ret[key] = obj[key]
+    }
+  })
+  return ret 
+}
+
+module.exports = function(entry){
+  let ret = []
   let dir = path.dirname(entry)
   let files = glob.sync(`${dir}/*.js`, {})
   files.forEach(file => {
-    let src = fs.readFileSync(file)
-    babylon.parse(src, {
-      JSXElement({ node }){
-        
+    let src = fs.readFileSync(file, 'utf8')
+    
+    let ast = babylon.parse(src, {
+      plugins: ['*'],
+      sourceType: 'module'
+    })
+    
+    traverse(ast, {
+      enter({ node, type }){
         function getAttr(name) {
-          let ret = path.node.openingElement.attributes.filter(
+          let ret = node.openingElement.attributes.filter(
             attr => attr.name.name === name
           )[0];
-          ret = ret ? ret.value : undefined;
+          ret = ret ? ret.value : ret;
+          ret = ret ? ret.value : ret;
           return ret;
         }
 
-        if (node.openingElement.name.name === "Route") {
-          let module = getAttr("module");
-          let path = getAttr("path");
-          let exact = getAttr("exact");
-          let strict = getAttr("strict");
-          ret.push({ module, path, exact, strict })
-        }
-      }
+        if((type === 'JSXElement') && (node.openingElement.name.name === "Route")){          
+          getAttr("module") && ret.push(clean({ 
+            module: path.join(dir, getAttr("module")), 
+            path: getAttr("path"), 
+            exact: getAttr("exact"), 
+            strict: getAttr("strict"),
+            hash: hashify(path.join(dir, getAttr("module")))
+          }))
+        }                  
+      }      
     })
   })
 

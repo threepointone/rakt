@@ -8,10 +8,16 @@ function hashify(path){
 }
 
 
+// todo - implement warnings for - 
+// NB: for great perf, `path` and `module` must be string literals, 
+// and `render`/`children` should not be spread as `{...props}`
+
+
+
 
 function wrap(SOURCE, name, hashed, absolute) {
   let path = JSON.stringify(name);
-
+  // todo - use imports instead of requires 
   return `require('rakt').wrap(${SOURCE}, { 
     module:${path}, 
     absolute: ${JSON.stringify(absolute)},
@@ -96,10 +102,31 @@ module.exports = function ({ types: t }) {
           path.node.openingElement.attributes.push(
             t.jSXAttribute(
               t.jSXIdentifier('absolute'), 
-              t.StringLiteral(absolute)
+              t.stringLiteral(absolute)
             ))            
               
           }                     
+        }
+      },
+      ClassDeclaration(path){
+        // test if react component 
+        let decorators = path.node.decorators
+        if(decorators){
+          
+          let dataDeco = decorators.filter(x => x.expression.type === 'CallExpression' && x.expression.callee.name === 'initial')[0]
+          if(dataDeco){            
+            let modPath = path.hub.file.opts.filename
+
+            // path.node.body.body.push(t.classProperty(
+            //   t.identifier('rakt'), 
+            //   t.stringLiteral(hashify(modPath)), 
+            //   t.emptyTypeAnnotation(), 
+            //   []
+            // ))
+             // add hash as static 
+            
+            dataDeco.expression.arguments.push(t.StringLiteral(hashify(modPath)))
+          }
         }
       }      
     }    

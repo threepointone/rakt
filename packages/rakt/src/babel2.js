@@ -9,6 +9,7 @@ module.exports = function ({ types: t }) {
   return {
     visitor: {      
       ClassDeclaration(path){
+        // test if react component 
         let decorators = path.node.decorators
         if(decorators){
           

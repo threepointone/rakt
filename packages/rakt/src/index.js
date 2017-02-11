@@ -28,12 +28,13 @@ export class Rakt extends React.Component{
   static childContextTypes = {
     rakt: PropTypes.object
   }
-  state = {
-    url: this.props.createHref(this.props.location)
-  }
+  
   inflight = {}
-  cache = {}
+  cache = this.props.cache
   errors = {}
+  url(){
+    return this.props.createHref(this.props.location)  
+  }
   getChildContext(){
     return {
       rakt: {
@@ -43,25 +44,27 @@ export class Rakt extends React.Component{
           //   this.inflight[`${mod}:${this.state.url}`].push(fn)
           //   return 
           // }
-          fetch(`/api/${mod}${this.state.url}`)
+          fetch(`/api/${mod}${this.url()}`)
             .then(x => x.json())
             .then(res => {
               
-              this.cache[`${mod}:${this.state.url}`] = res
+              this.cache[`${mod}:${this.url()}`] = res
+              // this.setState({ cache: this.cache })
               fn(undefined, res)
             }, error => {
-              this.errors[`${mod}:${this.state.url}`] = error
+              this.errors[`${mod}:${this.url()}`] = error
               fn(error)
             })          
         },
         get: (mod) => {
-          return this.cache[`${mod}:${this.state.url}`]
+          return this.cache[`${mod}:${this.url()}`]
         },        
         getError: (mod) => {
-          return this.errors[`${mod}:${this.state.url}`]
+          return this.errors[`${mod}:${this.url()}`]
         },        
         clear: () => {
           this.cache = {}
+          // this.setState({ cache: this.cache })
         }
       }
     }
@@ -98,24 +101,26 @@ export class Rakt extends React.Component{
   }
 }
 
-export function initial(mod){ // assuming this has been transpiled to an indentifier mod 
+export function initial(mod, modhash){ // assuming this has been transpiled to an indentifier mod 
   if(isBrowser && (typeof mod === 'function')){
     throw new Error('forgot to apply babel plugin')
   }
+  // get hash 
   return Target => {
+    
     return class Data extends React.Component{      
       static mod = mod
       static contextTypes = {
         rakt: PropTypes.object
       }
       state = {
-        data: this.context.rakt.get(mod), 
-        error: this.context.rakt.getError(mod)
+        data: this.context.rakt.get(!isBrowser ? modhash : mod), 
+        error: this.context.rakt.getError(!isBrowser ? modhash : mod)
       }
       
       componentDidMount(){
         if(!this.state.data && !this.state.error) {
-          this.context.rakt.fetch(mod, ( error, data ) => {
+          this.context.rakt.fetch(!isBrowser ? modhash : mod, (error, data ) => {
             this.setState({ error, data})
           })
         }
