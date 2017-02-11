@@ -53,19 +53,6 @@ optionally, use `render`/`children` as you normally would
 - tree-shakes itself to almost nothing 
 
 
-css
----
-
-[todo]
-
-rakt lets you write 'inline' css via [`glamor/createElement`](https://github.com/threepointone/glamor/blob/master/docs/createElement.md)
-```jsx
-<div css={{ color: 'red' }}>
-  bloody valentine
-</div>
-```
-
-
 data fetching
 ---
 
@@ -97,6 +84,19 @@ NB - *don't* declare/import any 'serverside only' dependencies outside the
 - todo - `@get`, `@post`, `@put`, `@del`
 - todo - `@socket`, `@sse`, `@memory`, etc 
 - todo - cache keys / idents 
+
+css
+---
+
+[todo]
+
+rakt lets you write 'inline' css via [glamor](https://github.com/threepointone/glamor/blob/master/docs/createElement.md)
+```jsx
+<div css={{ color: 'red' }}>
+  bloody valentine
+</div>
+```
+
 
 prpl ootb
 ---
@@ -139,6 +139,11 @@ implementation
 ---
 
 [todo]
+
+constraints
+---
+- `module` must be a string literal
+- when using `module`, `path` must be a string literal
 
 
 todo - 
