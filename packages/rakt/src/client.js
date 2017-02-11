@@ -5,9 +5,14 @@ import { render } from 'react-dom'
 import { Rakt } from './'
 import { BrowserRouter } from 'react-router-dom'
 import Helmet from 'react-helmet'
-
 import { rehydrate } from 'glamor'
-rehydrate(JSON.parse(document.getElementById('css-ids').dataset.ids))
+
+function dehydrate(name){
+  return JSON.parse(document.getElementById(`rakt-${name}`).dataset[name])
+}
+
+
+rehydrate(dehydrate('cssids'))
 
 let App = require($ENTRY)
 App = App.default || App
@@ -18,7 +23,8 @@ App = App.default || App
 
 window.__init = () => 
   render(<BrowserRouter basename='/app'>
-    <Rakt cache={JSON.parse(document.getElementById('rakt-ssr').dataset.ssr)}>
+    <Rakt cache={dehydrate('ssr')}
+      routes={dehydrate('routes')}>
       <div>
         <Helmet title="Home" />
         <App/>

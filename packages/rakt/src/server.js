@@ -61,7 +61,7 @@ export default function server({ entry }){
           query: {
             "presets": [ "es2015", "stage-0", "react" ],
             "plugins": [ require.resolve("./babel.js"), require.resolve("./babel2.js"), "transform-decorators-legacy" ]
-          }   // todo - ?
+          }  
         },
         {
           test: /\.js$/,
@@ -93,9 +93,7 @@ export default function server({ entry }){
     if(mod.mod){
       // todo - deep?
       mod.mod({
-        req, 
-        res, 
-        next, 
+        req, res, next, 
         done: (err, data) => err ? next(err) : res.send(data)
       })
     }
@@ -105,9 +103,12 @@ export default function server({ entry }){
   })
 
   app.get('*', (req, res, next) => {
+    // how to ignore
     // fetch data 
 
-    let matches = routes.filter(({ path, exact, strict }) => matchPath(req.url, '/app' + path, { exact, strict }))  
+    let matches = routes.filter(({ path, exact, strict }) => 
+      matchPath(req.url, '/app' + path, { exact, strict }))  
+
     let fetchers = matches    
       .filter(x => {
         let m = require(x.module)
@@ -124,7 +125,9 @@ export default function server({ entry }){
 
       let context = {}
       let html = renderToString(
-        <Layout assets={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]} routes={routes} hydrate={cache}>
+        <Layout assets={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]} 
+          routes={routes.map(({module, ...rest}) => rest)} 
+          hydrate={cache}>
           <StaticRouter location={req.url} context={context} basename='app'>
             <Rakt cache={cache}>
               <div>
@@ -140,10 +143,14 @@ export default function server({ entry }){
 
     let promises = fetchers    
       .map(x => {
-        return fetch(`http://localhost:3000/api/${x.hash}${req.url}`).then(x => x.json())
+        return fetch(`http://localhost:3000/api/${x.hash}${req.url}`)
+          .then(x => x.json())
       })
 
-    Promise.all(promises).then(results => andThen(undefined, matches.map((x, i) => ({...x, result: results[i]}))), andThen)    
+    Promise.all(promises).then(results => 
+      andThen(undefined, matches.map((x, i) => 
+        ({...x, result: results[i]}))), 
+      andThen)    
     
   })
   return app

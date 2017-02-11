@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 require('babel-register')({
   "presets": [ "es2015", "stage-0", "react" ],
-  "plugins": [ require.resolve("./babel.js"), "transform-decorators-legacy" ]  
+  "plugins": [ [require.resolve("./babel.js"), { server: true }], "transform-decorators-legacy" ]  
 })
 
 let server = require('./server').default

@@ -18,11 +18,11 @@ export default class Layout extends React.Component{
         {assets
           .filter(path => path.endsWith('.css'))
           .map(path => <link rel="stylesheet" key={path} href={path} />)}
-        <style>${css || ''}</style>
+        <style id='rakt-css'>${css || ''}</style>
       </head>
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
-        <noscript id='css-ids' data-ids={JSON.stringify(ids)}/>
+        <noscript id='rakt-cssids' data-cssids={JSON.stringify(ids)}/>
         <noscript id='rakt-routes' data-routes={JSON.stringify(routes)}/>
         <noscript id='rakt-ssr' data-ssr={JSON.stringify(hydrate)}/>
         {assets
