@@ -27,7 +27,7 @@ $ rakt index.js
 the big idea 
 ---
 
-we augment [react-router's](http://react-router.now.sh/) `<Route/>` api with one change
+one addition to [react-router's](http://react-router.now.sh/) `<Route/>` api
 
 ```diff
 - import User from './user.js'
