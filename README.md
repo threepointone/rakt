@@ -3,7 +3,7 @@ rakt
 
 [work in progress. come back when it's done!]
 
-a framework. for react/dialects. in a box.
+a framework, without any framework. for react/dialects. in a box.
 
 usage 
 --- 
@@ -30,7 +30,9 @@ the big idea
 one addition to [react-router's](http://react-router.now.sh/) `<Route/>` api
 
 ```diff
+import Route from 'react-router'
 - import User from './user.js'
+
 <Route path='/user/:id'
 -  component={User}
 +  module='./user.js'
