@@ -46,14 +46,24 @@ module.exports = function(entry){
           return ret;
         }
 
-        if((type === 'JSXElement') && (node.openingElement.name.name === "Route")){          
-          getAttr("module") && ret.push(clean({ 
-            module: path.join(dir, getAttr("module")), 
-            path: getAttr("path"), 
-            exact: getAttr("exact"), 
-            strict: getAttr("strict"),
-            hash: hashify(path.join(dir, getAttr("module")))
-          }))
+        if((type === 'JSXElement') && (node.openingElement.name.name === "Route")){ 
+          let module = getAttr("module") 
+
+          if(module){
+            let modPath = path.join(dir, module)
+            let mod = require(modPath)            
+            mod = mod.default || mod 
+
+            ret.push(clean({ 
+              initial: !!mod.mod, // 
+              module:modPath, 
+              path: getAttr("path"), 
+              exact: getAttr("exact"), 
+              strict: getAttr("strict"),
+              hash: hashify(path.join(dir, getAttr("module")))
+            }))
+          }
+          
         }                  
       }      
     })

@@ -87,6 +87,7 @@ export class Rakt extends React.Component{
 
       let matches = this.props.routes
         .filter(({path, exact, strict}) => matchPath(url.replace('/app', ''), path, {exact, strict}))
+        .filter(({ initial }) => !!initial)
         .filter(({ hash }) => !__webpack_modules__[hash]) //eslint-disable-line no-undef
         .filter(({ hash }) => !this.inflight[`${hash}:${url}`])
         
