@@ -90,6 +90,7 @@ export class Rakt extends React.Component{
         .filter(({ initial }) => !!initial)
         .filter(({ hash }) => !__webpack_modules__[hash]) //eslint-disable-line no-undef
         .filter(({ hash }) => !this.inflight[`${hash}:${url}`])
+        .filter(({ hash }) => !this.cache[`${hash}:${url}`])
         
       // todo - dedupe 
       let promises = matches.map(({ hash }) => fetch(`/api/${hash}${url}`).then(x => x.json()))

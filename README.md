@@ -146,7 +146,7 @@ constraints
 ---
 - `module` must be a string literal
 - when using `module`, `path` must be a string literal
-
+- *might* overfetch data for some edge cases 
 
 todo - 
 

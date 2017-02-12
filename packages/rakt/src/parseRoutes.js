@@ -55,7 +55,7 @@ module.exports = function(entry){
             mod = mod.default || mod 
 
             ret.push(clean({ 
-              initial: !!mod.mod, // 
+              initial: !!mod.mod,
               module:modPath, 
               path: getAttr("path"), 
               exact: getAttr("exact"), 
