@@ -30,6 +30,9 @@ export class Rakt extends React.Component{
   static childContextTypes = {
     rakt: PropTypes.object
   }
+  static contextTypes = {
+    router: PropTypes.object
+  }
   
   inflight = {}
   cache = this.props.cache
@@ -42,18 +45,21 @@ export class Rakt extends React.Component{
       rakt: {
         fetch: (mod, fn) => {
           // if already in flight, attach to that instead
-          // if(this.inflight[`${mod}:${this.state.url}`]){
-          //   this.inflight[`${mod}:${this.state.url}`].push(fn)
-          //   return 
-          // }
-          fetch(`/api/${mod}${this.url()}`)
+          let url = this.url()
+          if(this.inflight[`${mod}:${url}`]){
+            this.inflight[`${mod}:${url}`].then(x => fn(undefined, x), fn)
+            return 
+          }
+
+          this.inflight[`${mod}:${url}`] = fetch(`/api/${mod}${url}`)
             .then(x => x.json())
             .then(res => {
-              
-              this.cache[`${mod}:${this.url()}`] = res
+              this.inflight[`${mod}:${url}`] = undefined
+              this.cache[`${mod}:${url}`] = res
               fn(undefined, res)
             }, error => {
-              this.errors[`${mod}:${this.url()}`] = error
+              this.inflight[`${mod}:${url}`] = undefined
+              this.errors[`${mod}:${url}`] = error
               fn(error)
             })          
         },
@@ -65,32 +71,38 @@ export class Rakt extends React.Component{
         },        
         clear: () => {
           this.cache = {}
-          // this.setState({ cache: this.cache })
         }
       }
     }
   }
   componentWillUnmount(){
-    
+    // unlisten history 
   }
   componentDidMount(){
-    // this is the bit that lets you request for data for a module, before the chunk even arrives 
-    // this.context.history.listen(url => {
-    //   let matches = this.props.routes
-    //     .filter(({pattern, exact, strict}) => matchPath(this.state.url, pattern, {exact, strict}))
-    //     .filter(({ hash }) => !__webpack_modules__[hash]) //eslint-disable-line no-undef
-    //     .filter(({ hash }) => !this.inflight[`${hash}:${url}`])
-    //     // todo - dedupe 
-    //   matches.forEach(({ hash }) => this.inflight[`${hash}:${url}`] = [])
+    // this is the bit that lets you request for data for a module, 
+    // *before* the chunk even arrives 
+    this.context.router.listen(location => {
+      
+      let url = this.props.createHref(location)        
 
-    //   Promise.all(matches.map(({ moduleId }) => fetch(`/api/${moduleId}${url}`)))
-    //     .then(results => results.forEach((result, i) => {
-    //       this.cache[`${matches[i].moduleId}:${url}`] = result
-    //       this.inflight[`${matches[i].moduleId}:${url}`].forEach(l => l(undefined, result))
-    //       this.inflight[`${matches[i].moduleId}:${url}`] = undefined 
-    //     })) 
+      let matches = this.props.routes
+        .filter(({path, exact, strict}) => matchPath(url.replace('/app', ''), path, {exact, strict}))
+        .filter(({ hash }) => !__webpack_modules__[hash]) //eslint-disable-line no-undef
+        .filter(({ hash }) => !this.inflight[`${hash}:${url}`])
         
-    // })
+      // todo - dedupe 
+      let promises = matches.map(({ hash }) => fetch(`/api/${hash}${url}`).then(x => x.json()))
+      
+      // update inflight 
+      promises.forEach((x, i) => this.inflight[`${matches[i].hash}:${url}`] = x)
+
+      Promise.all(promises)
+        .then(results => results.forEach((result, i) => {
+          this.cache[`${matches[i].hash}:${url}`] = result
+          this.inflight[`${matches[i].hash}:${url}`] = undefined 
+        })) 
+        
+    })
     // listen on url changes 
     // find mods which haven't loaded yet
     // make requests 

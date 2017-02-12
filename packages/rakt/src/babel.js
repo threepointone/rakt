@@ -17,7 +17,7 @@ function wrap(SOURCE, name, hashed, absolute, server) {
   let path = JSON.stringify(name);
   // todo - use imports instead of requires 
   return `require('rakt').wrap(${SOURCE}, { 
-    module:${path}, 
+    module: ${path}, 
      ${server ? `absolute: '${absolute}',` : ''}
     load: done =>
       require('rakt').ensure(require.resolveWeak(${path}), 
