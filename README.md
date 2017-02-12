@@ -30,7 +30,7 @@ the big idea
 one addition to [react-router's](http://react-router.now.sh/) `<Route/>` api
 
 ```diff
-import Route from 'react-router'
+import { Route } from 'react-router'
 - import User from './user.js'
 
 <Route path='/user/:id'
