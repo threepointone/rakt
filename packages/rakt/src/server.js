@@ -79,7 +79,7 @@ export default function server({ entry }){
   // app.use(historyApiFallback({ verbose: false }));
   app.use(devware(compiler, {
     // noInfo: true,
-    publicPath: '/app'
+    // publicPath: '/app'
   }))
 
   app.use(hotware(compiler));
@@ -87,6 +87,7 @@ export default function server({ entry }){
   app.use(favicon('./favicon.png'));
 
   app.use('/api/:mod/*', (req, res, next ) => {
+    // todo - feed the matches that got here, since the url isn't reliable 
     let mod = require(modules[req.params.mod])
     mod = (mod.default ? mod.default : mod)
     if(mod.mod){
@@ -106,7 +107,7 @@ export default function server({ entry }){
     // fetch data 
 
     let matches = routes.filter(({ path, exact, strict }) => 
-      matchPath(req.url, '/app' + path, { exact, strict }))  
+      matchPath(req.url, path, { exact, strict }))  
 
     let fetchers = matches    
       .filter(x => {
@@ -127,7 +128,7 @@ export default function server({ entry }){
         <Layout assets={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]} 
           routes={routes.map(({module, ...rest}) => rest)} 
           hydrate={cache}>
-          <StaticRouter location={req.url} context={context} basename='app'>
+          <StaticRouter location={req.url} context={context}>
             <Rakt cache={cache}>
               <div>
                 <Helmet title="Home" />

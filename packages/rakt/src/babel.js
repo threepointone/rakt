@@ -13,7 +13,8 @@ function hashify(path){
 // and `render`/`children` should not be spread as `{...props}`
 
 
-function wrap(SOURCE, name, hashed, absolute, server) {
+function wrap(SOURCE, name, absolute, server) {
+  let hashed = hashify(absolute); 
   let path = JSON.stringify(name);
   // todo - use imports instead of requires 
   return `require('rakt').wrap(${SOURCE}, { 
@@ -68,15 +69,15 @@ module.exports = function ({ types: t }) {
             let absolute = require.resolve(
               nodepath.join(nodepath.dirname(path.hub.file.opts.filename), attrModule.value))
 
-            let hashed = hashify(absolute); 
             
-            [attrRender, attrChildren].forEach(X => {
+            
+            ;[attrRender, attrChildren].forEach(X => {
 
               let pts = X ? (X.expression ? X.expression : X) : X
               let xSrc = X ? 
                 src.substring(pts.start, pts.end) : 
                 defaultSrc;
-              let wrapped = X ? wrap(xSrc, attrModule.value, hashed, absolute, state.opts.server) : null;
+              let wrapped = X ? wrap(xSrc, attrModule.value, absolute, state.opts.server) : null;
               if (wrapped) {
                 X.expression = babylon.parse(wrapped, {
                   plugins: [ "*" ]
@@ -85,7 +86,7 @@ module.exports = function ({ types: t }) {
             })  
 
             if(!attrRender && !attrChildren){
-              let wrapped = wrap(defaultSrc, attrModule.value, hashed, absolute, state.opts.server) // todo - 
+              let wrapped = wrap(defaultSrc, attrModule.value, absolute, state.opts.server) // todo - 
               path.node.openingElement.attributes.push(t.jSXAttribute(t.jSXIdentifier('render'), 
                   t.jSXExpressionContainer(babylon.parse(wrapped, {
                   plugins: [ "*" ]

@@ -22,7 +22,7 @@ App = App.default || App
 // if ssr was off, you could start right away 
 
 window.__init = () => 
-  render(<BrowserRouter basename='/app'>
+  render(<BrowserRouter>
     <Rakt cache={dehydrate('ssr')}
       routes={dehydrate('routes')}>
       <div>

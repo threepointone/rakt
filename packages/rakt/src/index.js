@@ -1,7 +1,9 @@
 import React, { PropTypes } from "react";
 let isBrowser = typeof window !== "undefined";
 import { withRouter, matchPath } from 'react-router'
-let nodeRequire = !isBrowser && (() => eval('require'))()
+
+let nodeRequire = !isBrowser && (() => eval('require'))() //eslint-disable-line no-eval 
+// todo - a better solution for ^
 
 
 export class Loading extends React.Component {
@@ -86,11 +88,13 @@ export class Rakt extends React.Component{
       let url = this.props.createHref(location)        
 
       let matches = this.props.routes
-        .filter(({path, exact, strict}) => matchPath(url.replace('/app', ''), path, {exact, strict}))
-        .filter(({ initial }) => !!initial)
-        .filter(({ hash }) => !__webpack_modules__[hash]) //eslint-disable-line no-undef
-        .filter(({ hash }) => !this.inflight[`${hash}:${url}`])
-        .filter(({ hash }) => !this.cache[`${hash}:${url}`])
+        .filter(({path, exact, strict}) => matchPath(url, path, {exact, strict})) // todo - fix basename        
+        .filter(({ initial, hash }) => 
+          !!initial && 
+          !__webpack_modules__[hash] &&     //eslint-disable-line no-undef // todo - this is wrong
+          !this.inflight[`${hash}:${url}`] && 
+          !this.cache[`${hash}:${url}`]) 
+        
         
       // todo - dedupe 
       let promises = matches.map(({ hash }) => fetch(`/api/${hash}${url}`).then(x => x.json()))

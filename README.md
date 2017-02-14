@@ -54,6 +54,8 @@ optionally, use `render`/`children` as you normally would
 - handles code splitting, SSR, css, behind the scenes 
 - tree-shakes itself to almost nothing 
 
+todo - `defer`, `preserve`, `leaf`
+
 
 data fetching
 ---
@@ -80,8 +82,7 @@ export default class User {
 // augment this with your own solutions - relay, redux, etc
 ```
 
-NB - *don't* declare/import any 'serverside only' dependencies outside the 
-`@initial` decorator. 
+rakt will take care of efficiently fetching, hydration(for ssr), caching, etc
 
 - todo - `@get`, `@post`, `@put`, `@del`
 - todo - `@socket`, `@sse`, `@memory`, etc 
