@@ -55,7 +55,7 @@ This list isn't meant to intimidate :) If you notice, these are problems we've b
 ```jsx
 <Route path='/' exact module='./home.js' />
 ```
-When used with SSR, this will render content on the server, and expect the chunk corresponding to `home.js` to be available when react picks up on the browser. Without SSR, it'll load the module and render in place. When navigated to (via <Link/>, pushState, etc), the module will load asynchronously, and then render as expected. This is fairly typical react+SPA behavior. 
+When used with SSR, this will render content on the server, and expect the chunk corresponding to `home.js` to be available when react picks up on the browser. Without SSR, it'll load the module and render in place. When navigated to (via `<Link/>`, `pushState`, etc), the module will load asynchronously, and then render as expected. This is fairly typical react+SPA behavior. 
 
 - defer 
 ```jsx
