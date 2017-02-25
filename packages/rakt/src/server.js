@@ -61,16 +61,15 @@ export default function server({ entry }){
             "presets": [ "es2015", "stage-0", "react" ],
             "plugins": [ require.resolve("./babel.js"), require.resolve("./babel2.js"), "transform-decorators-legacy" ]
           }  
-        },
-        {
-          test: /\.js$/,
-          loader: require.resolve('./loader.js'),
-          query: {
-            entry
-          } 
         }
       ]    
-    }
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        $ENTRY: JSON.stringify(entry),
+        $ROUTES: JSON.stringify(routes.map(({module, ...rest}) => rest))
+      })
+    ]
   })
   // webpack dev server 
 
@@ -92,10 +91,15 @@ export default function server({ entry }){
     mod = (mod.default ? mod.default : mod)
     if(mod.mod){
       // todo - deep?
-      mod.mod({
+      let returned = mod.mod({
         req, res, next, 
         done: (err, data) => err ? next(err) : res.send(data)
       })
+      if(returned && returned.then){
+        // promise-like!
+        // todo - make sure `done()`` wasn't called
+        returned.then(x => res.send(x), x => next(x))
+      }
     }
     else {
       next(404)
@@ -125,8 +129,7 @@ export default function server({ entry }){
 
       let context = {}
       let html = renderToString(
-        <Layout assets={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]} 
-          routes={routes.map(({module, ...rest}) => rest)} 
+        <Layout assets={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]}           
           hydrate={cache}>
           <StaticRouter location={req.url} context={context}>
             <Rakt cache={cache}>

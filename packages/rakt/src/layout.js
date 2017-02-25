@@ -23,7 +23,6 @@ export default class Layout extends React.Component{
       <body>
         <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
         <noscript id='rakt-cssids' data-cssids={JSON.stringify(ids)}/>
-        <noscript id='rakt-routes' data-routes={JSON.stringify(routes)}/>
         <noscript id='rakt-ssr' data-ssr={JSON.stringify(hydrate)}/>
         {assets
           .filter(path => path.endsWith('.js'))

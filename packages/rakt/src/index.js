@@ -108,12 +108,7 @@ export class Rakt extends React.Component{
           this.inflight[`${matches[i].hash}:${url}`] = undefined 
         })) 
         
-    })
-    // listen on url changes 
-    // find mods which haven't loaded yet
-    // make requests 
-    // fill cache
-    // intercept possible requests once module loads 
+    })    
   }
   render(){
     return this.props.children

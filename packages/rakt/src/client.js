@@ -24,7 +24,7 @@ App = App.default || App
 window.__init = () => 
   render(<BrowserRouter>
     <Rakt cache={dehydrate('ssr')}
-      routes={dehydrate('routes')}>
+      routes={$ROUTES}>
       <div>
         <Helmet title="Home" />
         <App/>
