@@ -53,25 +53,25 @@ This list isn't meant to intimidate :) If you notice, these are problems we've b
 
 - **default**
 ```jsx
-<Route path='/' exact module='./home.js' />
+<Route path='/' module='./home.js' />
 ```
 When used with SSR, this will render content on the server, and expect the chunk corresponding to `home.js` to be available when react picks up on the browser. Without SSR, it'll load the module and render in place. When navigated to (via `<Link/>`, `pushState`, etc), the module will load asynchronously, and then render as expected. This is fairly typical react+SPA behavior. 
 
 - **defer**
 ```jsx
-<Route path='/' exact module='./cart.js' defer />
+<Route path='/' module='./cart.js' defer />
 ```
 Simply adding a `defer` attribute should signal that this component should not be rendered during SSR. The module will load and render asynchronously on the browser.
 
 - **preserve**
 ```jsx
-<Route path='/' exact module='./maps.js' preserve />
+<Route path='/' module='./maps.js' preserve />
 ```
 The `preserve` attribute will let rakt render the component html during SSR, will not include the module for initial render, and preserve the prerendered html in the browser until the module asynchronously loads. 
 
 - **leaf**
 ```jsx
-<Route path='/' exact module='./carousel.js' leaf />
+<Route path='/' module='./carousel.js' leaf />
 ```
 To explain the problem again, 
 
