@@ -1,5 +1,5 @@
-(nb: This is just a sketch, doesn't work yet)
-(nb: some knowledge of server side rendering react required)
+- (nb: This is just a sketch, doesn't work yet)
+- (nb: some knowledge of server side rendering react required)
 
 
 consider the following layout for a hypothetical ecommerce home page 
@@ -46,7 +46,7 @@ at first glance, this doesn't seem too hard to implement. you can bust out a pla
 - you start getting bug reports that the carousel doesn't 'work', because while you're rendering the carousel (controls and all), you still need to load the whole js bundle just so that controls works, but that doesn't stop people from clicking on them before that
 - specific to react- when you start up a react app on an SSRed page, you need to have the modules and data corresponding to that html ready, for react's first pass when you call .render()...
 - as an example - consider the osm maps block; perhaps we'd like to 'universally' render the tiles on the server, yet load the javascript corresponding to it, asynchronously. with the react model, we won't be able to preserve the tiles we rendered, leaving us to blow the tiles away and show a loading spinner instead. 
-- finally, how do we do this *consistently*? Product requirements can change on a daily basis, and you don't want to rewrite your stack for any of these options. Is there a single, *SIMPLE* model that unifies all the above requirements?
+- finally, how do we do this *consistently*? Product requirements can change on a daily basis, and you don't want to rewrite your stack for any of these options. Is there a single, *SIMPLE* model that unifies all the above requirements, hiding the implementation details?
 - etc etc etc 
 
 This list isn't meant to intimidate :) If you notice, these are problems we've been solving for years, with mutable DOMs and a hack or two. The answers are a little hazier in the react world, this is my take with rakt.
@@ -67,11 +67,16 @@ Simply adding a `defer` attribute should signal that this component should not b
 ```jsx
 <Route path='/' exact module='./maps.js' preserve />
 ```
-The `preserve` attribute will let rakt render the component html during SSR, but will not include the module for initial render, but *will* preserve the prerendered html until the module asynchronously loads. 
+The `preserve` attribute will let rakt render the component html during SSR, will not include the module for initial render, and preserve the prerendered html in the browser until the module asynchronously loads. 
 
 - leaf
 ```jsx
 <Route path='/' exact module='./carousel.js' leaf />
 ```
 To explain the problem again, 
-- we want to load *just* the chunk for the carousel, render it the point where we SSRed, *then* load the main bundle, render the whole page, doing a handoff with the carousel *already* in motion, preserving state (in this case, the 'active' slide)
+
+- we want to load *just* the chunk for the carousel, render it the point where we SSRed, *then* load the main bundle, render the whole page, doing a handoff with the carousel *already* in motion, preserving state (in this case, the 'active' slide). 
+
+You might notice that behavior is similar to how web components work, and that's not accidental. However, this adds a requirement that they be SSR-able, that WCs will never be able to do. 
+
+The `leaf` attribute should do the above behavior. As a bonus, we could choose to not even load the main bundle, replicating old school widget behavior. This is *awesome*!!!11!!
