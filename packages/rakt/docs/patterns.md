@@ -51,25 +51,25 @@ at first glance, this doesn't seem too hard to implement. you can bust out a pla
 
 This list isn't meant to intimidate :) If you notice, these are problems we've been solving for years, with mutable DOMs and a hack or two. The answers are a little hazier in the react world, this is my take with rakt.
 
-- default
+- **default**
 ```jsx
 <Route path='/' exact module='./home.js' />
 ```
 When used with SSR, this will render content on the server, and expect the chunk corresponding to `home.js` to be available when react picks up on the browser. Without SSR, it'll load the module and render in place. When navigated to (via `<Link/>`, `pushState`, etc), the module will load asynchronously, and then render as expected. This is fairly typical react+SPA behavior. 
 
-- defer 
+- **defer**
 ```jsx
 <Route path='/' exact module='./cart.js' defer />
 ```
 Simply adding a `defer` attribute should signal that this component should not be rendered during SSR. The module will load and render asynchronously on the browser.
 
-- preserve
+- **preserve**
 ```jsx
 <Route path='/' exact module='./maps.js' preserve />
 ```
 The `preserve` attribute will let rakt render the component html during SSR, will not include the module for initial render, and preserve the prerendered html in the browser until the module asynchronously loads. 
 
-- leaf
+- **leaf**
 ```jsx
 <Route path='/' exact module='./carousel.js' leaf />
 ```
@@ -80,3 +80,6 @@ To explain the problem again,
 You might notice that behavior is similar to how web components work, and that's not accidental. However, this adds a requirement that they be SSR-able, that WCs will never be able to do. 
 
 The `leaf` attribute should do the above behavior. As a bonus, we could choose to not even load the main bundle, replicating old school widget behavior. This is *awesome*!!!11!!
+
+
+A combination of the above options should let us target all the previously mentioned requirements, without too much trouble. 
