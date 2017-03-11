@@ -39,6 +39,8 @@ import { Route } from 'react-router'
 />
 ```
 
+behind the scenes, rakt handles code splitting + SSR + resource loading
+
 optionally, use `render`/`children` as you normally would
 
 ```jsx
@@ -50,11 +52,31 @@ optionally, use `render`/`children` as you normally would
 />
 ``` 
 
-- no new apis(!)
-- handles code splitting, SSR, css, behind the scenes 
-- tree-shakes itself to almost nothing 
+defer
+---
 
-todo - `defer`, `preserve`, `leaf`
+you can prevent ssr for a `<Route/>` with the `defer` attribute. great for starting apps faster, and offloading some work to the browser. rakt manages efficiently preloading code and data for the same.  
+```jsx
+<Route path='/user/:id'
+  module='./user.js'
+  defer
+/>
+
+```
+
+todo - `<Defer/>`
+
+
+leaf
+---
+
+[todo]
+
+
+preserve
+---
+
+[todo]
 
 
 data fetching

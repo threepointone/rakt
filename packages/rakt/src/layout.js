@@ -20,7 +20,7 @@ export default class Layout extends React.Component{
         {stylesheets.map(path => <link rel="stylesheet" key={path} href={'/' + path} />)}
         {deferred.map(({ script, data }) => [
           script && <link rel='preload' key={script} href={script} as='script'/>, 
-          data && <link rel='preload' key={data} href={data} />])}
+          data && <link rel='prefetch' key={data} href={data} />])}
         <style id='rakt-css'>${css || ''}</style>
       </head>
       <body>
