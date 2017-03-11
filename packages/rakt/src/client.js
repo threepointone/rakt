@@ -1,4 +1,5 @@
-/* global $ENTRY */
+/* global $ENTRY $ROUTES */
+
 
 import React from 'react'
 import { render } from 'react-dom'

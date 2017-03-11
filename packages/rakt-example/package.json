@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "repository": {},
   "scripts": {
-    "start": "rakt"
+    "start": "rakt ./src/index.js"
   },
   "author": "Sunil Pai <threepointone@gmail.com>",
   "license": "MIT",

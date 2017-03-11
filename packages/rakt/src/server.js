@@ -91,14 +91,18 @@ export default function server({ entry }){
     mod = (mod.default ? mod.default : mod)
     if(mod.mod){
       // todo - deep?
+      let called = false, done = (err, data) => {
+        called = true
+        err ? next(err) : res.send(data)
+      }
       let returned = mod.mod({
         req, res, next, 
-        done: (err, data) => err ? next(err) : res.send(data)
+        done
       })
       if(returned && returned.then){
         // promise-like!
         // todo - make sure `done()`` wasn't called
-        returned.then(x => res.send(x), x => next(x))
+        returned.then(x => !called && res.send(x), x => !called && next(x))
       }
     }
     else {
@@ -106,19 +110,26 @@ export default function server({ entry }){
     }          
   })
 
+  function getFetcher(x){
+    let m = require(x.module)
+    m = m.default || m 
+    return m.mod 
+  }
+
   app.get('*', (req, res, next) => {
     // how to ignore
     // fetch data 
 
-    let matches = routes.filter(({ path, exact, strict }) => 
-      matchPath(req.url, path, { exact, strict }))  
+    let matches = routes.filter(({ path, exact, strict, defer }) => 
+      !defer && matchPath(req.url, path, { exact, strict }))  
+
+    let deferred = routes.filter(({ path, exact, strict, defer }) => 
+      defer && matchPath(req.url, path, { exact, strict }))
+
+    
 
     let fetchers = matches    
-      .filter(x => {
-        let m = require(x.module)
-        m = m.default || m 
-        return !!m.mod 
-      })
+      .filter(x => !!getFetcher(x))
 
     function andThen(err, data){
       
@@ -129,14 +140,16 @@ export default function server({ entry }){
 
       let context = {}
       let html = renderToString(
-        <Layout assets={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]}           
+        <Layout scripts={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]}
+          stylesheets={[]}
+          deferred={deferred.map(x => ({ script: `${x.hash}.chunk.js`, data: getFetcher(x) ? `/api/${x.hash}${req.url}`: false }))}
           hydrate={cache}>
           <StaticRouter location={req.url} context={context}>
             <Rakt cache={cache}>
-              <div>
-                <Helmet title="Home" />
-                <App />  
-              </div>
+                <div>
+                  <Helmet title="Home" />
+                  <App />
+                </div>
             </Rakt>        
           </StaticRouter>
         </Layout>)

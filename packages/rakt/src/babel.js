@@ -1,4 +1,4 @@
-let babylon = require("babylon");
+let babylon = require('babylon');
 let hash = require('glamor/lib/hash').default
 
 let nodepath = require('path')
@@ -13,11 +13,15 @@ function hashify(path){
 // and `render`/`children` should not be spread as `{...props}`
 
 
-function wrap(SOURCE, name, absolute, server) {
+function wrap(SOURCE, name, absolute, server, defer, leaf, preserve) {
   let hashed = hashify(absolute); 
   let path = JSON.stringify(name);
   // todo - use imports instead of requires 
+  // todo - defet / leaf / preserve should work with expression containers 
   return `require('rakt').wrap(${SOURCE}, { 
+    ${defer === null ? `defer: true,` : ''}
+    ${leaf === null ? `leaf: true,` : ''}
+    ${preserve === null? `preserve: true,` : ''}
     module: ${path}, 
      ${server ? `absolute: '${absolute}',` : ''}
     load: done =>
@@ -46,7 +50,7 @@ module.exports = function ({ types: t }) {
           return ret;
         }
 
-        if (path.node.openingElement.name.name === "Route") {
+        if (path.node.openingElement.name.name === 'Route') {
           // todo - make sure module is a string 
           // todo - make sure path is a static string (for SSR)
           // todo - export name 
@@ -56,14 +60,17 @@ module.exports = function ({ types: t }) {
           // if render, wrap
           // if children, wrap
           // else, send own render prop
-          let attrModule = getAttr("module");
+          let attrModule = getAttr('module');
           let attrComponent = getAttr('component')
           if(attrModule && attrComponent){
             throw new Error('cannot use module and component together')
           }
           
           if(attrModule){
-            let attrRender = getAttr("render");
+            let attrRender = getAttr('render');
+            let attrDefer = getAttr('defer')
+            let attrLeaf = getAttr('leaf')
+            let attrPreserve = getAttr('preserve')
             let attrChildren = path.node.children.filter(attr => attr.type !== 'JSXText')[0];
             // todo ^ - make this better 
             let absolute = require.resolve(
@@ -77,19 +84,19 @@ module.exports = function ({ types: t }) {
               let xSrc = X ? 
                 src.substring(pts.start, pts.end) : 
                 defaultSrc;
-              let wrapped = X ? wrap(xSrc, attrModule.value, absolute, state.opts.server) : null;
+              let wrapped = X ? wrap(xSrc, attrModule.value, absolute, state.opts.server, attrDefer, attrLeaf, attrPreserve) : null;
               if (wrapped) {
                 X.expression = babylon.parse(wrapped, {
-                  plugins: [ "*" ]
+                  plugins: [ '*' ]
                 }).program.body[0].expression;
               }
             })  
 
             if(!attrRender && !attrChildren){
-              let wrapped = wrap(defaultSrc, attrModule.value, absolute, state.opts.server) // todo - 
+              let wrapped = wrap(defaultSrc, attrModule.value, absolute, state.opts.server, attrDefer, attrLeaf, attrPreserve) // todo - 
               path.node.openingElement.attributes.push(t.jSXAttribute(t.jSXIdentifier('render'), 
                   t.jSXExpressionContainer(babylon.parse(wrapped, {
-                  plugins: [ "*" ]
+                  plugins: [ '*' ]
                 }).program.body[0].expression) 
                ))  
             }                            
@@ -112,3 +119,25 @@ module.exports = function ({ types: t }) {
   }
 };
  
+
+
+// @middleware(({ req, res, next }) => {
+//   req.user = require('decodeCookie')(req.cookies)
+//   next()
+// })
+// class App extends React.Component{
+//   render() {
+//     return <Profile/>   
+//   }
+// }
+
+// @data(async ({ req, res }) => {
+//   return await require('mongo')(3111).get('users', req.user)
+// })
+// class Profile extends React.Component{
+//   render() {
+//     return <div>
+//       {JSON.stringify(this.props.data)}
+//     </div>
+//   }
+// }

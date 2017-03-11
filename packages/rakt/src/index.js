@@ -32,15 +32,12 @@ export class Rakt extends React.Component{
   static childContextTypes = {
     rakt: PropTypes.object
   }
-  static contextTypes = {
-    router: PropTypes.object
-  }
   
   inflight = {}
   cache = this.props.cache
-  errors = {}
+  errors = this.props.errors || {}
   url(){
-    return this.props.createHref(this.props.location)  
+    return this.props.history.createHref(this.props.location)  
   }
   getChildContext(){
     return {
@@ -83,9 +80,9 @@ export class Rakt extends React.Component{
   componentDidMount(){
     // this is the bit that lets you request for data for a module, 
     // *before* the chunk even arrives 
-    this.context.router.listen(location => {
+    this.props.history.listen(location => {
       
-      let url = this.props.createHref(location)        
+      let url = this.props.history.createHref(location)        
 
       let matches = this.props.routes
         .filter(({path, exact, strict}) => matchPath(url, path, {exact, strict})) // todo - fix basename        
@@ -124,6 +121,7 @@ export function initial(mod, modhash){ // assuming this has been transpiled to a
     
     return class Data extends React.Component{      
       static mod = mod
+      static modhash = modhash
       static contextTypes = {
         rakt: PropTypes.object
       }
@@ -170,11 +168,18 @@ export function ensure(moduleId, fn, done){
 }
 
 // todo - weakmap cache on fn 
-export function wrap(fn, { module, load, defer, absolute }) {
+export function wrap(fn, { module, load, defer, leaf, preserve, absolute }) {
   return ({ match, history }) => {
     
     if (!isBrowser) {
-      // todo - defer      
+      // todo - defer  
+      if(defer){
+        return <Loading
+          key={module}          
+          fn={fn}
+          args={{ match, history }}
+        />
+      }
       
       let Module = match ? nodeRequire(absolute) : undefined;
       return fn({ match, history, Module });

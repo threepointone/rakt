@@ -42,7 +42,7 @@ module.exports = function(entry){
             attr => attr.name.name === name
           )[0];
           ret = ret ? ret.value : ret;
-          ret = ret ? ret.value : ret;
+          ret = ret ? ret.value : ret; // not a typo. just a babel thing. 
           return ret;
         }
 
@@ -55,11 +55,14 @@ module.exports = function(entry){
             mod = mod.default || mod 
 
             ret.push(clean({ 
-              initial: !!mod.mod,
-              module:modPath, 
+              initial: (!!mod.mod) || undefined,
+              module: modPath, 
               path: getAttr("path"), 
               exact: getAttr("exact"), 
               strict: getAttr("strict"),
+              defer: getAttr("defer"),
+              preserve: getAttr('preserve'),
+              leaf: getAttr('leaf'),
               hash: hashify(path.join(dir, getAttr("module")))
             }))
           }

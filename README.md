@@ -154,8 +154,6 @@ todo -
 - prefetch links
 - websockets?
 - work with aliased modules 
-- `defer`
-- preserve server side rendered html while module asyncly loads 
 - sw-precache, etc
 - use named exports (incl data fetches)
 - manifest and such
@@ -166,3 +164,5 @@ todo -
 - in-house `<Route/>`, `<Link/>`, etc 
 - optimistic updates
 - rhl
+
+
