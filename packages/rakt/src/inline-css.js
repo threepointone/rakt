@@ -25,7 +25,7 @@ function matches(str){
   return arr 
 }
 
-export default function(sheet){
+export default function(){
   let result = [], ids = [], buffering = false
   let insed = {}
   let stream = through(function(data){
@@ -64,6 +64,7 @@ export default function(sheet){
       let last = result.join('')
       this.queue(last)
     }
+
     this.queue(null)
   })
   return stream
