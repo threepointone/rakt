@@ -6,6 +6,8 @@ import parseRoutes from './parseRoutes'
 import webpack from 'webpack'
 import 'isomorphic-fetch'
 
+import { template } from 'rapscallion'
+
 import favicon from 'serve-favicon'
 
 import { StaticRouter, matchPath } from 'react-router-dom'
@@ -123,7 +125,25 @@ export default function server({ entry }){
 
     let deferred = routes.filter(({ path, exact, strict, defer }) => 
       defer && matchPath(req.url, path, { exact, strict }))
+    .map(x => ({ script: `${x.hash}.chunk.js`, data: getFetcher(x) ? `/api/${x.hash}${req.url}`: false }))
 
+    let scripts = [ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]
+    let stylesheets = []
+
+    // send the first bits immediately 
+    res.type('html')
+    res.write(`<!doctype html>
+  <html>
+    <head>
+      <link rel="shortcut icon" href="/favicon.ico" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+      ${scripts.map(path => `<link rel='preload' href='${path}' as='script' />`).join('')}
+      ${stylesheets.map(path => `<link rel='stylesheet' href='${'/' + path}' />`).join('')}
+      ${deferred.map(({ script, data }) => 
+        `<link rel='preload' href='${script}' as='script'/>`).join('')}
+    </head>
+    <body>
+      <div id='root'>`)
     
 
     let fetchers = matches    
@@ -136,18 +156,19 @@ export default function server({ entry }){
         cache[`${x.hash}:${req.url}`] = x.result
       })
 
+      // now send the rest of the html 
       let context = {}
-
-      layout(<StaticRouter location={req.url} context={context}>
+      template`${<StaticRouter location={req.url} context={context}>
         <Rakt cache={cache}>
             <App />
         </Rakt>        
-      </StaticRouter>, {
-        scripts: [ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)],
-        stylesheets: [],
-        deferred: deferred.map(x => ({ script: `${x.hash}.chunk.js`, data: getFetcher(x) ? `/api/${x.hash}${req.url}`: false })),
-        hydrate: cache
-      }).toStream().pipe(res)
+      </StaticRouter>}</div>
+          <noscript id='rakt-ssr' data-ssr='${JSON.stringify(cache)}'></noscript>
+          ${scripts.map(path => `<script src='${path}' ></script>`).join('')}
+          <script>window.__init()</script>
+        </body>
+      </html>`.toStream().pipe(res)
+
     }
 
     let promises = fetchers    
