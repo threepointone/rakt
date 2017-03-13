@@ -55,13 +55,12 @@ optionally, use `render`/`children` as you normally would
 defer
 ---
 
-you can prevent ssr for a `<Route/>` with the `defer` attribute. great for starting apps faster, and offloading some work to the browser. rakt manages efficiently preloading code and data for the same.  
-```jsx
-<Route path='/user/:id'
-  module='./user.js'
-  defer
-/>
+you can prevent ssr for a `<Route/>` with the `defer` attribute. 
+great for starting apps faster, and offloading some work to the browser. 
+rakt manages efficiently preloading code and/or data for the same.  
 
+```jsx
+<Route path='/user/:id' module='./user.js' defer />
 ```
 
 todo - `<Defer/>`
@@ -103,6 +102,7 @@ export default class User {
 
 // augment this with your own solutions - relay, redux, etc
 ```
+
 
 rakt will take care of efficiently fetching, hydration(for ssr), caching, etc
 
@@ -186,5 +186,5 @@ todo -
 - in-house `<Route/>`, `<Link/>`, etc 
 - optimistic updates
 - rhl
-
+- fonts and icons and svgs and images and such
 

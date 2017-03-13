@@ -10,6 +10,8 @@
   "author": "Sunil Pai <threepointone@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "rakt": "^0.0.1"
+    "rakt": "^0.0.1",
+    "react": "next",
+    "react-router-dom": "^4.0.0"
   }
 }

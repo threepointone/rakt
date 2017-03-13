@@ -4,6 +4,7 @@ import express from 'express'
 import parseModules from './parseModules'
 import parseRoutes from './parseRoutes'
 import webpack from 'webpack'
+import inline from './inline-css'
 import 'isomorphic-fetch'
 
 import { template } from 'rapscallion'
@@ -11,7 +12,6 @@ import { template } from 'rapscallion'
 import favicon from 'serve-favicon'
 
 import { StaticRouter, matchPath } from 'react-router-dom'
-import { layout } from './layout'
 import { Rakt } from './'
 import devware from 'webpack-dev-middleware'
 // import hotware from 'webpack-hot-middleware'
@@ -158,6 +158,7 @@ export default function server({ entry }){
 
       // now send the rest of the html 
       let context = {}
+
       template`${<StaticRouter location={req.url} context={context}>
         <Rakt cache={cache}>
             <App />
@@ -167,7 +168,7 @@ export default function server({ entry }){
           ${scripts.map(path => `<script src='${path}' ></script>`).join('')}
           <script>window.__init()</script>
         </body>
-      </html>`.toStream().pipe(res)
+      </html>`.toStream().pipe(inline()).pipe(res)
 
     }
 

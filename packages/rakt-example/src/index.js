@@ -1,5 +1,5 @@
-// https://chime.social/
-
+/** @jsx createElement */
+import { css, createElement } from 'rakt/src'
 import React from 'react'
 import { Route, Switch, Link } from "react-router-dom";
 
@@ -8,8 +8,8 @@ export default class App extends React.Component {
     return (
       <div>
         <ul>
-          <li><Link to="/">home</Link></li>
-          <li><Link to="/a">to a</Link></li>
+          <li {...css({ color: 'green' })}><Link to="/">home</Link></li>
+          <li><Link className={css({ color: 'red' }) + ' ' + css({ backgroundColor: 'blue' }) } to="/a">to a</Link></li>
           <li><Link to="/b">to b</Link></li>
           <li><Link to="/c">to c</Link></li>
           <li><Link to="/asd">404</Link></li>
@@ -24,7 +24,6 @@ export default class App extends React.Component {
           
           <Route
             path="/a"
-            defer
             exact
             module="./a.js"            
           />
@@ -43,6 +42,7 @@ export default class App extends React.Component {
           >{({ Module }) => Module ? <Module.default /> : <span> loading... </span>}</Route>
           <Route render={() => <span>no match</span>} />
         </Switch>
+        <br className='self-closing'/>
       </div>
     );
   }

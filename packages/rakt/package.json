@@ -34,8 +34,5 @@
     "react": "*",
     "react-dom": "*",
     "react-router-dom": "*"
-  },
-  "devDependencies": {
-    "backpack": "^0.5.5"
   }
 }

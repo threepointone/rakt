@@ -2,6 +2,12 @@ import React, { PropTypes } from "react";
 let isBrowser = typeof window !== "undefined";
 import { withRouter, matchPath } from 'react-router-dom'
 
+import { css as _css } from 'glamor'
+import { createElement as _createElement } from 'glamor/react'
+
+export const css = _css
+export const createElement = _createElement
+
 let nodeRequire = !isBrowser && (() => eval('require'))() //eslint-disable-line no-eval 
 // todo - a better solution for ^
 
