@@ -14,12 +14,12 @@ export default class App extends React.Component {
           <li><Link to="/c">to c</Link></li>
           <li><Link to="/asd">404</Link></li>
         </ul>
-        <Route path="/" exact>
-            {({ match }) =>
-              match
-                ? <span> home sweet home </span>
-                : <span> searching... </span>}
-          </Route>
+        <Route path="/" exact>{
+          ({ match }) =>
+            match
+              ? <span> home sweet home </span>
+              : <span> searching... </span>
+          }</Route>
         <Switch>
           
           <Route

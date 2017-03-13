@@ -7,12 +7,12 @@ require('babel-register')({
 })
 
 let server = require('./server').default
-let serve = server({ entry: require.resolve(path.resolve(process.argv[2])) })
+let entry = require.resolve(path.resolve(process.argv[2]))
 
-serve.listen(3000, err => {
+server({ entry }).listen(3000, err => {
   if(err){
     return console.error(err)  
   }
-  console.log('listening on', 3000)
-  
+  console.log('listening on', 3000)  
 })
+

@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 let isBrowser = typeof window !== "undefined";
-import { withRouter, matchPath } from 'react-router'
+import { withRouter, matchPath } from 'react-router-dom'
 
 let nodeRequire = !isBrowser && (() => eval('require'))() //eslint-disable-line no-eval 
 // todo - a better solution for ^
@@ -50,7 +50,7 @@ export class Rakt extends React.Component{
             return 
           }
 
-          this.inflight[`${mod}:${url}`] = fetch(`/api/${mod}${url}`)
+          this.inflight[`${mod}:${url}`] = fetch(`/api/${mod}${url}`) // use jsonp here 
             .then(x => x.json())
             .then(res => {
               this.inflight[`${mod}:${url}`] = undefined
@@ -104,6 +104,7 @@ export class Rakt extends React.Component{
           this.cache[`${matches[i].hash}:${url}`] = result
           this.inflight[`${matches[i].hash}:${url}`] = undefined 
         })) 
+        //  todo - on error 
         
     })    
   }
@@ -158,6 +159,10 @@ export function put(mod){
 
 export function del(mod){
 
+}
+
+export function cache(mod){
+  
 }
 
 export function ensure(moduleId, fn, done){

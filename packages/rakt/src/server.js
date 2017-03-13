@@ -1,6 +1,6 @@
 import React from 'react'
 import express from 'express'
-import path from 'path'
+// import path from 'path'
 import parseModules from './parseModules'
 import parseRoutes from './parseRoutes'
 import webpack from 'webpack'
@@ -8,15 +8,13 @@ import 'isomorphic-fetch'
 
 import favicon from 'serve-favicon'
 
-import { renderToString } from 'react-dom/server'
-import { StaticRouter, matchPath } from 'react-router'
-import Layout from './layout'
+import { StaticRouter, matchPath } from 'react-router-dom'
+import { layout } from './layout'
 import { Rakt } from './'
 import devware from 'webpack-dev-middleware'
-import hotware from 'webpack-hot-middleware'
+// import hotware from 'webpack-hot-middleware'
 // import historyApiFallback from 'connect-history-api-fallback'
 
-import Helmet from 'react-helmet'
 
 // let oldRender = Route.render 
 
@@ -77,11 +75,11 @@ export default function server({ entry }){
 
   // app.use(historyApiFallback({ verbose: false }));
   app.use(devware(compiler, {
+    lazy: true
     // noInfo: true,
-    // publicPath: '/app'
   }))
 
-  app.use(hotware(compiler));
+  // app.use(hotware(compiler));
 
   app.use(favicon('./favicon.png'));
 
@@ -139,22 +137,17 @@ export default function server({ entry }){
       })
 
       let context = {}
-      let html = renderToString(
-        <Layout scripts={[ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)]}
-          stylesheets={[]}
-          deferred={deferred.map(x => ({ script: `${x.hash}.chunk.js`, data: getFetcher(x) ? `/api/${x.hash}${req.url}`: false }))}
-          hydrate={cache}>
-          <StaticRouter location={req.url} context={context}>
-            <Rakt cache={cache}>
-                <div>
-                  <Helmet title="Home" />
-                  <App />
-                </div>
-            </Rakt>        
-          </StaticRouter>
-        </Layout>)
-      res.type('html')
-      res.send('<!doctype html>' + html)    
+
+      layout(<StaticRouter location={req.url} context={context}>
+        <Rakt cache={cache}>
+            <App />
+        </Rakt>        
+      </StaticRouter>, {
+        scripts: [ 'main.bundle.js', ...matches.map(x => `${x.hash}.chunk.js`)],
+        stylesheets: [],
+        deferred: deferred.map(x => ({ script: `${x.hash}.chunk.js`, data: getFetcher(x) ? `/api/${x.hash}${req.url}`: false })),
+        hydrate: cache
+      }).toStream().pipe(res)
     }
 
     let promises = fetchers    
@@ -170,5 +163,5 @@ export default function server({ entry }){
     
   })
   return app
-  // when do we 404?
+  // todo - when do we 404?
 }
