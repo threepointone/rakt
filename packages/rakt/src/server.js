@@ -4,10 +4,14 @@ import express from 'express'
 import parseModules from './parseModules'
 import parseRoutes from './parseRoutes'
 import webpack from 'webpack'
-import inline from './inline-css'
+import inline from 'glamor-inline'
+
+
+import { renderToString } from 'react-dom/server'
+// import inline from './inline-css'
 import 'isomorphic-fetch'
 
-import { template } from 'rapscallion'
+// import { template, render } from 'rapscallion'
 
 import favicon from 'serve-favicon'
 
@@ -158,17 +162,42 @@ export default function server({ entry }){
 
       // now send the rest of the html 
       let context = {}
-
-      template`${<StaticRouter location={req.url} context={context}>
+      let element = <StaticRouter location={req.url} context={context}>
         <Rakt cache={cache}>
             <App />
         </Rakt>        
-      </StaticRouter>}</div>
-          <noscript id='rakt-ssr' data-ssr='${JSON.stringify(cache)}'></noscript>
-          ${scripts.map(path => `<script src='${path}' ></script>`).join('')}
-          <script>window.__init()</script>
-        </body>
-      </html>`.toStream().pipe(inline()).pipe(res)
+      </StaticRouter>
+      let last = `</div>
+            <noscript id='rakt-ssr' data-ssr='${JSON.stringify(cache)}'></noscript>            
+            ${scripts.map(path => `<script src='${path}' ></script>`).join('')}
+            <script>
+              window.__init()
+            </script>
+          </body>
+        </html>`
+      res.write(inline(renderToString(element)))
+      res.write(last)
+      res.end()
+
+      // rapscallion doesn't work well enough yet 
+      // let renderer = render(element)
+
+      // let xtream = renderer.toStream()
+      // xtream.pipe(inline()).pipe(res, { end: false})
+      // xtream.on('end', () => {
+      //   res.write(`</div>
+      //        <noscript id='rakt-ssr' data-ssr='${JSON.stringify(cache)}'></noscript>            
+      //        ${scripts.map(path => `<script src='${path}' ></script>`).join('')}
+      //        <script>
+      //         document.querySelector('[data-reactroot]').setAttribute('data-react-checksum', "${renderer.checksum()}")
+      //         debugger;
+      //          window.__init()
+      //        </script>
+      //      </body>
+      //    </html>`)
+      //   res.end()
+      // })
+      
 
     }
 

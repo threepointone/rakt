@@ -25,7 +25,7 @@ function matches(str){
   return arr 
 }
 
-export default function(){
+export default function inline(){
   let result = [], ids = [], buffering = false
   let insed = {}
   let stream = through(function(data){

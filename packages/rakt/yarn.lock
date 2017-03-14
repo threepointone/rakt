@@ -50,10 +50,6 @@ align-text@^0.1.1, align-text@^0.1.3:
     longest "^1.0.1"
     repeat-string "^1.5.2"
 
-aligned-buffer@~0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/aligned-buffer/-/aligned-buffer-0.1.2.tgz#8fc0526ba7c59356686243d2359bd34269ea74eb"
-
 ansi-html@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/ansi-html/-/ansi-html-0.0.7.tgz#813584021962a9e9e6fd039f940d12f56ca7859e"
@@ -300,13 +296,6 @@ babel-types@^6.23.0:
 babylon@^6.11.0, babylon@^6.15.0:
   version "6.16.1"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.16.1.tgz#30c5a22f481978a9e7f8cdfdf496b11d94b404d3"
-
-backpack@^0.5.5:
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/backpack/-/backpack-0.5.5.tgz#a9412191e248299850125dd7701a759fb4c21bfb"
-  dependencies:
-    aligned-buffer "~0.1.2"
-    redis "~0.7.3"
 
 balanced-match@^0.4.1:
   version "0.4.2"
@@ -668,10 +657,6 @@ decamelize@^1.0.0, decamelize@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
 
-deep-equal@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
-
 deep-extend@~0.4.0:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.1.tgz#efe4113d08085f4e6f9687759810f807469e2253"
@@ -800,10 +785,6 @@ evp_bytestokey@^1.0.0:
   dependencies:
     create-hash "^1.1.1"
 
-exenv@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.1.tgz#75de1c8dee02e952b102aa17f8875973e0df14f9"
-
 exit-on-epipe@:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/exit-on-epipe/-/exit-on-epipe-1.0.0.tgz#f6e0579c8214d33a08109fd6e2e5c1dbc70463fc"
@@ -867,7 +848,7 @@ extsprintf@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.0.2.tgz#e1080e0658e300b06294990cc70e1502235fd550"
 
-fbjs@^0.8.8, fbjs@^0.8.9:
+fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.8:
   version "0.8.9"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.9.tgz#180247fbd347dcc9004517b904f865400a0c8f14"
   dependencies:
@@ -1001,9 +982,25 @@ glamor-inline@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/glamor-inline/-/glamor-inline-1.0.5.tgz#865d232a74e8da10d5f43d5a599ba784d2633c56"
 
+glamor-react@^3.0.0-1:
+  version "3.0.0-1"
+  resolved "https://registry.yarnpkg.com/glamor-react/-/glamor-react-3.0.0-1.tgz#79e96c9735395c0769c447147f68471f996cb37d"
+  dependencies:
+    glamor "^3.0.0-1"
+    object-assign "^4.1.0"
+    react "^15.4.1"
+
 glamor@^2.20.24:
   version "2.20.24"
   resolved "https://registry.yarnpkg.com/glamor/-/glamor-2.20.24.tgz#a299af2eec687322634ba38e4a0854d8743d2041"
+  dependencies:
+    babel-runtime "^6.18.0"
+    fbjs "^0.8.8"
+    object-assign "^4.1.0"
+
+glamor@^3.0.0-1:
+  version "3.0.0-1"
+  resolved "https://registry.yarnpkg.com/glamor/-/glamor-3.0.0-1.tgz#60f489e96d96c12620803d3677ac26413cb76a95"
   dependencies:
     babel-runtime "^6.18.0"
     fbjs "^0.8.8"
@@ -1393,26 +1390,6 @@ loader-utils@^0.2.16:
     emojis-list "^2.0.0"
     json5 "^0.5.0"
     object-assign "^4.0.1"
-
-lodash._getnative@^3.0.0:
-  version "3.9.1"
-  resolved "https://registry.yarnpkg.com/lodash._getnative/-/lodash._getnative-3.9.1.tgz#570bc7dede46d61cdcde687d65d3eecbaa3aaff5"
-
-lodash.isarguments@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/lodash.isarguments/-/lodash.isarguments-3.1.0.tgz#2f573d85c6a24289ff00663b491c1d338ff3458a"
-
-lodash.isarray@^3.0.0:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
-
-lodash.keys@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/lodash.keys/-/lodash.keys-3.1.2.tgz#4dbc0472b156be50a0b286855d1bd0b0c656098a"
-  dependencies:
-    lodash._getnative "^3.0.0"
-    lodash.isarguments "^3.0.0"
-    lodash.isarray "^3.0.0"
 
 lodash@^4.14.0, lodash@^4.17.4, lodash@^4.2.0:
   version "4.17.4"
@@ -1859,21 +1836,13 @@ rc@~1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@16.0.0-alpha.3:
-  version "16.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.0.0-alpha.3.tgz#9cf304ea4bcdafe026f29ec2e71373316ec597ab"
+react-dom@^15.4.2:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
   dependencies:
-    fbjs "^0.8.9"
+    fbjs "^0.8.1"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
-
-react-helmet@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-helmet/-/react-helmet-4.0.0.tgz#df74bcd6ff585a1ccbbfba5aaa1c346cabc43d03"
-  dependencies:
-    deep-equal "1.0.1"
-    object-assign "^4.0.1"
-    react-side-effect "^1.1.0"
 
 react-router-dom@^4.0.0:
   version "4.0.0"
@@ -1892,18 +1861,11 @@ react-router@^4.0.0, react-router@v4.0.0:
     path-to-regexp "^1.5.3"
     warning "^3.0.0"
 
-react-side-effect@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-1.1.0.tgz#57209f7ebc940d55e0fda82fe51422654175d609"
+react@^15.4.1, react@^15.4.2:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.4.2.tgz#41f7991b26185392ba9bae96c8889e7e018397ef"
   dependencies:
-    exenv "^1.2.1"
-    shallowequal "^0.2.2"
-
-react@16.0.0-alpha.3:
-  version "16.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.0.0-alpha.3.tgz#addfd7ae9d801fd20c6244142354ae0cb7b1fe00"
-  dependencies:
-    fbjs "^0.8.9"
+    fbjs "^0.8.4"
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
@@ -1954,10 +1916,6 @@ readdirp@^2.0.0:
     minimatch "^3.0.2"
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
-
-redis@~0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/redis/-/redis-0.7.3.tgz#ee57b7a44d25ec1594e44365d8165fa7d1d4811a"
 
 regenerator-runtime@^0.10.0:
   version "0.10.3"
@@ -2104,12 +2062,6 @@ sha.js@^2.3.6:
   resolved "https://registry.yarnpkg.com/sha.js/-/sha.js-2.4.8.tgz#37068c2c476b6baf402d14a49c67f597921f634f"
   dependencies:
     inherits "^2.0.1"
-
-shallowequal@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-0.2.2.tgz#1e32fd5bcab6ad688a4812cb0cc04efc75c7014e"
-  dependencies:
-    lodash.keys "^3.1.2"
 
 signal-exit@^3.0.0:
   version "3.0.2"

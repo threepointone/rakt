@@ -8,7 +8,7 @@ export default class App extends React.Component {
     return (
       <div>
         <ul>
-          <li {...css({ color: 'green' })}><Link to="/">home</Link></li>
+          <li><Link to="/">home</Link></li>
           <li><Link className={css({ color: 'red' }) + ' ' + css({ backgroundColor: 'blue' }) } to="/a">to a</Link></li>
           <li><Link to="/b">to b</Link></li>
           <li><Link to="/c">to c</Link></li>
@@ -42,7 +42,8 @@ export default class App extends React.Component {
           >{({ Module }) => Module ? <Module.default /> : <span> loading... </span>}</Route>
           <Route render={() => <span>no match</span>} />
         </Switch>
-        <br className='self-closing'/>
+        <span className='self-closing'></span>
+        <input />
       </div>
     );
   }
