@@ -23,7 +23,12 @@ function clean(obj){
   return ret 
 }
 
+let cache = {}
+
 module.exports = function(entry){
+  if(cache[entry]){
+    return cache[entry]
+  }
   let ret = []
   let dir = path.dirname(entry)
   let files = glob.sync(`${dir}/*.js`, {})
@@ -71,6 +76,8 @@ module.exports = function(entry){
       }      
     })
   })
+
+  cache[entry] = ret
 
   return ret  
 }

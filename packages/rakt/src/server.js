@@ -47,6 +47,7 @@ export default function server({ entry }){
   
   let modules = parseModules(entry)
   let routes = parseRoutes(entry)
+
   let compiler = webpack({ 
     devtool: "source-map",
     entry: [entry, require.resolve('./client.js')],
@@ -137,17 +138,17 @@ export default function server({ entry }){
     // send the first bits immediately 
     res.type('html')
     res.write(`<!doctype html>
-  <html>
-    <head>
-      <link rel="shortcut icon" href="/favicon.ico" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" /> 
-      ${scripts.map(path => `<link rel='preload' href='${path}' as='script' />`).join('')}
-      ${stylesheets.map(path => `<link rel='stylesheet' href='${'/' + path}' />`).join('')}
-      ${deferred.map(({ script, data }) => 
-        `<link rel='preload' href='${script}' as='script'/>`).join('')}
-    </head>
-    <body>
-      <div id='root'>`)
+      <html>
+        <head>
+          <link rel="shortcut icon" href="/favicon.ico" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" /> 
+          ${scripts.map(path => `<link rel='preload' href='${path}' as='script' />`).join('')}
+          ${stylesheets.map(path => `<link rel='stylesheet' href='${'/' + path}' />`).join('')}
+          ${deferred.map(({ script, data }) => 
+            `<link rel='preload' href='${script}' as='script'/>`).join('')}
+        </head>
+        <body>
+          <div id='root'>`)
     
 
     let fetchers = matches    
@@ -167,15 +168,15 @@ export default function server({ entry }){
             <App />
         </Rakt>        
       </StaticRouter>
+      res.write(inline(renderToString(element)))
+      
       let last = `</div>
             <noscript id='rakt-ssr' data-ssr='${JSON.stringify(cache)}'></noscript>            
-            ${scripts.map(path => `<script src='${path}' ></script>`).join('')}
-            <script>
-              window.__init()
-            </script>
+            ${scripts.map(path => `<script src='${path}'></script>`).join('')}
+            <script>window.__init()</script>
           </body>
         </html>`
-      res.write(inline(renderToString(element)))
+      
       res.write(last)
       res.end()
 

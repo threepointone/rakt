@@ -60,7 +60,6 @@ export default function inline(){
     
   }, function(){
     if(result.length > 0){
-      // flush css
       let last = result.join('')
       this.queue(last)
     }
