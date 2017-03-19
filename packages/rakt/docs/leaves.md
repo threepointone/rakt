@@ -98,4 +98,4 @@ class Carousel extends React.Component{
 
 [1] - ...yet! nothing that some chutzpah and a custom fiber renderer couldn't solve. Soon, hopefully!
 
-nb: hello web components folks! Before you start @-ing me that wc/polymer/skate 'solves' this problem, I'd like to acknowledge that the inspiration for the above clearly comes from them. But also please note that they *don't* solve anything else, and punt hard on any form of composition/syncing once these elements *do* load. It's why we folks like react/dialects. 
+nb: hello web components folks! Before you start @-ing me that wc/polymer/skate 'solves' this problem, I'd like to acknowledge that the inspiration for the above clearly comes from them. react/dialects solve much more though (syncing/composition/ssr, to name a few), which is why I'm attempting to solve this in react land. 
