@@ -40,7 +40,8 @@ export class App extends React.Component{
     return <div>
       <Header />
 -     <Carousel />
-+     <Leaf module='./carousel' />      
++     <Leaf module='./carousel' />    
+      ...  
     </div>
   }
 }
