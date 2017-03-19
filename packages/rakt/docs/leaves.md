@@ -50,7 +50,7 @@ This is the sequence we'd like -
 
 - render html
 - load carousel.js (and its deps)
-- 'start' the carousel, with props passed 
+- 'start' the carousel, with original props
 - load the rest of the application
 - 'start' the app, seamlessly picking up the carousel component 
 
